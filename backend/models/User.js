@@ -1,6 +1,6 @@
 const moongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const userSchema = new Schema({
+const UserSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -16,4 +16,4 @@ const userSchema = new Schema({
         minLength:6,
     }
 })
-export default moongoose.model('User',userSchema)
+module.exports = user;  

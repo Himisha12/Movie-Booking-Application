@@ -1,4 +1,4 @@
-export const getAllUser = async(req,res,next) => {
+const getAllUser = async(req,res,next) => {
     let users;
     try{
         users = await User.find();
@@ -10,3 +10,4 @@ export const getAllUser = async(req,res,next) => {
     }
     return res.status(200).json({users})
 }
+module.exports = {getAllUser};
