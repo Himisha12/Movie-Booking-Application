@@ -1,7 +1,8 @@
-//const Movies=require("../models/Movies");
-// const jwt=require('jsonwebtoken');
+const Movies=require("../models/Movies");
+const jwt=require('jsonwebtoken');
 // const mongoose=require('mongoose');
-//const admin = require("../models/admin");
+const admin = require("../models/Admin");
+
 const addMovie=async(req,res)=>{
     const extractToken= req.headers.authorization.split(" ")[1];
 
@@ -12,46 +13,46 @@ const addMovie=async(req,res)=>{
         })
     }
     console.log(extractToken);
-};
-//     let adminId;
-//     jwt.verify(extractToken,process.env.SECERT_KEY,(err,decrypted)=>{
-//         if(err)
-//         {
-//             return res.status(401).json({
-//                 message:"Invalid Token",
-//             });
-//         }
-//         else{
-//             adminId=decrypted.id;
-//             return;
-//         }
-//     })
 
-//     const {title,description,releaseDate,posterUrl,featured,actors}=req.body;
+    let adminId;
+    jwt.verify(extractToken,process.env.SECERT_KEY,(err,decrypted)=>{
+        if(err)
+        {
+            return res.status(400).json({
+                message:'${err.message}'});
+        }
+        else{
+            adminId=decrypted.id;
+            return;
+        }
+    })
+
+const {title,description,releaseDate,posterUrl,featured,actors}=req.body;
 //     console.log(req.body);
 
 //         if(res.status==400)
 //         {
 //             res.send("error");
 //         }
-//     if(!title && title.trim() === "" && !description && description.trim()=== "" && !posterUrl&&posterUrl.trim()=== "")
-//     {
-//         return res.status(422).json({
-//             message:"Invalid Inputs"
-//         }) 
-//     }
+if(!title && title.trim() === "" && !description && description.trim()=== "" && !posterUrl&&posterUrl.trim()=== "")
+    {
+        return res.status(422).json({
+            message:"Invalid Inputs"
+        }) 
+    }
 
-//     let movie;
-//     try{
-//         movie=new Movies({
-//             title,
-//             description,
-//             releaseDate: new Date(`${releaseDate}`),
-//             posterUrl,
-//             featured,
-//             admin:adminId,
-//             actors
-//         })
+    let movie;
+    try{
+        movie=new Movies({
+            title,
+            description,
+            releaseDate: new Date(`${releaseDate}`),
+            posterUrl,
+            featured,
+            admin:adminId,
+            actors
+        });
+        movie = await movie.save();
         
 //         const session=await mongoose.startSession();
 //         const adminUser= await admin.findById(adminId);
@@ -62,19 +63,20 @@ const addMovie=async(req,res)=>{
 //         await adminUser.save({session});
 
 //         await session.commitTransaction();
-//     }
-//     catch(err)
-//     {
-//         return res.send(err.message);
-//     }
-//     if(!movie)
-//     {
-//         return res.status(500).json({
-//             message:"something went wrong"
-//         })
-//     }
-//     return res.status(201).json({movie})
-// }
+    }
+    catch(err)
+    {
+        return console.log(err);
+        //return res.send(err.message);
+    }
+    if(!movie)
+    {
+        return res.status(500).json({
+            message:"REquest failed"
+        })
+    }
+    return res.status(201).json({movie})
+};
 
 // const getallMovies=async(req,res,next)=>{
 //     let movies;
