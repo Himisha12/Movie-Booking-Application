@@ -78,47 +78,47 @@ if(!title && title.trim() === "" && !description && description.trim()=== "" && 
     return res.status(201).json({movie})
 };
 
-// const getallMovies=async(req,res,next)=>{
-//     let movies;
-//     try{
-//         movies=await Movies.find();
-//     }
-//     catch(err){
-//         return res.send(err.message);
-//     }
-//     if(!movies)
-//     {
-//         return res.status(500).json({
-//             message:"something went wrong"
-//         })
-//     }
-//     return res.status(200).json({movies})
+const getallMovies=async(req,res,next)=>{
+    let movies;
+    try{
+        movies=await Movies.find();
+    }
+    catch(err){
+        return console.log(err);
+       // return res.send(err.message);
+    }
+    if(!movies)
+    {
+        return res.status(500).json({
+            message:"Request failed"
+        })
+    }
+    return res.status(200).json({movies})
 
-// }
-
-
-
-// const getMoviesbyId=async(req,res)=>{
-//     const id=req.params.id;
-//     let movie;
-//     try{
-//         movie=await Movies.findById(id);
-
-//     }
-//     catch(err)
-//     {
-//         return res.send(err.message);
-//     }
-
-//     if(!movie)
-//     {
-//         return res.status(404).json({
-//             message:'movie not found'
-//         })
-//     }
-// return res.status(200).json({movie});
-
-// }
-module.exports={addMovie
-    //,getallMovies,getMoviesbyId
 }
+
+
+
+const getMoviesbyId=async(req,res)=>{
+    const id=req.params.id;
+    let movie;
+    try{
+        movie=await Movies.findById(id);
+
+    }
+    catch(err)
+    {
+        return console.log(err);
+        //return res.send(err.message);
+    }
+
+    if(!movie)
+    {
+        return res.status(404).json({
+            message:"Invaliid Movie ID"
+        })
+    }
+return res.status(200).json({movie});
+
+}
+module.exports={addMovie,getallMovies,getMoviesbyId}
