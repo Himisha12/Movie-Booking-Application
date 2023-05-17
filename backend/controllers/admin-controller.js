@@ -1,6 +1,6 @@
 const Admin = require('../models/Admin'); 
 const bcrypt=require('bcryptjs');
-//const jwt = require( "jsonwebtoken");
+const jwt = require( "jsonwebtoken");
 const addAdmin=async(req,res,next)=>{
     const {email,password}=req.body;
 
@@ -75,12 +75,13 @@ if(!isPasswordCorrect)
 {
     return res.status(400).json({message:"incorrect password"});
 }
-// const token=jwt.sign({id:existingAdmin._id},process.env.SECERT_KEY,{
-//     expiresIn:"7d"
-// })
+const token=jwt.sign({id:existingAdmin._id},process.env.SECERT_KEY,{
+    expiresIn:"7d"
+})
 
-res.status(200).json({message:"Authentication Succesfull"//,token,id:existingAdmin._id
+res.status(200).json({message:"Authentication Succesfull",token,id:existingAdmin._id
 });
+
 }
 
 // const getAdmins=async(req,res)=>{
