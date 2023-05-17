@@ -1,13 +1,21 @@
-const {admin}=require ("mongodb");
+const Admin = require('../models/Admin'); 
 const bcrypt=require('bcryptjs');
 //const jwt = require( "jsonwebtoken");
 const addAdmin=async(req,res,next)=>{
     const {email,password}=req.body;
 
+    if(
+        !email && 
+        email.trim()==="" && 
+        !password && password.trim()===""
+    ) 
+    {
+        return res.status(422).json({message:"Invalid inputs"});
+    }
     let existingAdmin;
 
     try{
-        existingAdmin= await admin.findOne({email});
+        existingAdmin= await Admin.findOne({email});
     }
     catch(err)
     {
@@ -22,7 +30,7 @@ const addAdmin=async(req,res,next)=>{
     let admin;
     const hashedPassword=bcrypt.hashSync(password);
     try{
-        admin=new admin({email,password:hashedPassword})
+        admin=new Admin({email,password:hashedPassword})
         admin=await admin.save();
     }
     catch(err)
@@ -37,37 +45,43 @@ const addAdmin=async(req,res,next)=>{
 
 }
 
-// const adminlogin=async(req,res)=>{
-//     const {email,password}=req.body;
+const adminlogin = async(req,res)=>{
+    const {email,password}=req.body;
 
-//     if(!email&&email.trim()==="" && !password&&password.trim()==="")
-// {
-//     return res.status(400).json({message:"Invalid Input data"});
+if(
+    !email && 
+    email.trim()==="" && 
+    !password && password.trim()===""
+) 
+{
+    return res.status(422).json({message:"Invalid inputs"});
+}
     
-// }
-// let existingAdmin;
-// try{
-//     existingAdmin=await admin.findOne({email})
-// }
-// catch(err)
-// {
-//     return res.send(err);
-// }
-// if(!existingAdmin)
-// {
-//     return res.status(401).json({message:"admin not found"});
-// }
-// const isPasswordCorrect=bcrypt.compareSync(password,existingAdmin.password);
-// if(!isPasswordCorrect)
-// {
-//     return res.status(400).json({message:"invalid password"});
-// }
+let existingAdmin;
+try{
+    existingAdmin=await Admin.findOne({email})
+}
+catch(err)
+{
+    return console.log(err);
+    //return res.send(err);
+}
+if(!existingAdmin)
+{
+    return res.status(400).json({message:"admin not found"});
+}
+const isPasswordCorrect=bcrypt.compareSync(password,existingAdmin.password);
+if(!isPasswordCorrect)
+{
+    return res.status(400).json({message:"incorrect password"});
+}
 // const token=jwt.sign({id:existingAdmin._id},process.env.SECERT_KEY,{
 //     expiresIn:"7d"
 // })
 
-// res.status(200).json({message:"Login Succesfull",token,id:existingAdmin._id});
-// }
+res.status(200).json({message:"Authentication Succesfull"//,token,id:existingAdmin._id
+});
+}
 
 // const getAdmins=async(req,res)=>{
 //     let admins;
@@ -102,6 +116,4 @@ const addAdmin=async(req,res,next)=>{
 // };
 
 
-module.exports={addAdmin
-    //,adminlogin,getAdmins,getAdminByID
-}
+module.exports={addAdmin,adminlogin}

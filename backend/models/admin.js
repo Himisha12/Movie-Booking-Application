@@ -1,5 +1,5 @@
 const mongoose=require('mongoose');
-const mongo=require('mongoose');
+//const mongo=require('mongoose');
 
 const adminSchema=new mongoose.Schema({
     email:{
@@ -13,11 +13,10 @@ const adminSchema=new mongoose.Schema({
         required:true,
     },
     addedMovies:[{
-        type:mongoose.Types.ObjectId,
-        ref:"Movies"
+
+        type:'String',
         
-    },
-    ],
-})
-const admin=mongoose.model('admin',adminSchema);
-module.exports=admin;
+    }]
+});
+const Admin = mongoose.model('admin',adminSchema);
+module.exports = Admin;
